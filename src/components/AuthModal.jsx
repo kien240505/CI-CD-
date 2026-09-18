@@ -249,23 +249,6 @@ export const AuthModal = () => {
             </button>
           </form>
 
-          {/* Quick demo hint */}
-          {authMode === 'login' && (
-            <div style={{ marginTop: '16px', textAlign: 'center', borderTop: '1px solid var(--border-light)', paddingTop: '14px' }}>
-              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>
-                Tài khoản demo nhanh:
-              </span>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                style={{ fontSize: '0.8rem', padding: '6px 12px' }}
-                onClick={() => setForm(f => ({ ...f, email: 'demo@technova.com', password: 'demo123' }))}
-              >
-                Điền demo@technova.com / demo123
-              </button>
-            </div>
-          )}
-
           {authMode === 'register' && (
             <p style={{ textAlign: 'center', fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '14px' }}>
               Đã có tài khoản?{' '}
