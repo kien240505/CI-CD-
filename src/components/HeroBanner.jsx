@@ -4,7 +4,7 @@ import { Sparkles, ArrowRight, ShieldCheck, Truck, RefreshCw } from 'lucide-reac
 export const HeroBanner = ({ onShopNow }) => {
   return (
     <div style={{
-      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(6, 182, 212, 0.08) 100%)',
+      background: 'var(--bg-card)',
       border: '1px solid var(--border-accent)',
       borderRadius: 'var(--radius-lg)',
       padding: '40px 32px',
@@ -47,16 +47,6 @@ export const HeroBanner = ({ onShopNow }) => {
         </div>
       </div>
 
-      {/* Decorative background glow circle */}
-      <div style={{
-        position: 'absolute',
-        right: '-50px',
-        top: '-50px',
-        width: '350px',
-        height: '350px',
-        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(0,0,0,0) 70%)',
-        pointerEvents: 'none'
-      }} />
     </div>
   );
 };

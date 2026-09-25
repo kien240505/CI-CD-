@@ -70,7 +70,7 @@ export const ContactModal = ({ isOpen, onClose }) => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
             {/* Contact Info Panel */}
             <div style={{
-              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.08) 100%)',
+              background: 'var(--bg-card)',
               border: '1px solid var(--border-accent)',
               borderRadius: 'var(--radius-md)',
               padding: '24px',
