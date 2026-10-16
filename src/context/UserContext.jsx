@@ -2,6 +2,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
+export const isAdminUser = (user) => {
+  const role = String(user?.role ?? user?.roleName ?? user?.role_name ?? '').toLowerCase();
+  return ['admin', 'superadmin'].includes(role) || user?.isAdmin === true || user?.is_admin === true;
+};
+
 // --- Standalone mock users storage (for offline mode) ---
 let localUsers = [
   {

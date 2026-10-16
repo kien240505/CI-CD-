@@ -11,9 +11,11 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { Toast } from './components/Toast';
 import { fetchProducts, fetchCategories } from './services/api';
 import { CartProvider } from './context/CartContext';
+import { useUser } from './context/UserContext';
 import { SlidersHorizontal, Headset, ShieldCheck } from 'lucide-react';
 
 const MainShop = ({ search, setSearch, isContactOpen, setIsContactOpen }) => {
+  const { currentUser, openAuth } = useUser();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -105,7 +107,13 @@ const MainShop = ({ search, setSearch, isContactOpen, setIsContactOpen }) => {
       />
 
       <CartDrawer
-        onProceedCheckout={() => setIsCheckoutOpen(true)}
+        onProceedCheckout={() => {
+          if (!currentUser) {
+            openAuth('login');
+            return;
+          }
+          setIsCheckoutOpen(true);
+        }}
       />
 
       <CheckoutModal
@@ -170,7 +178,7 @@ export default function App() {
           <p style={{ marginBottom: 0 }}>© 2026 TechNova E-Commerce Store. All rights reserved.</p>
         </footer>
 
-        <AuthModal />
+        <AuthModal navigateTo={navigateTo} />
         <Toast />
       </div>
     </CartProvider>

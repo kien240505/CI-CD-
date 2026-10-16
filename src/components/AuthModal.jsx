@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, Phone, Eye, EyeOff, ShoppingBag, UserCheck } from 'lucide-react';
-import { useUser } from '../context/UserContext';
+import { isAdminUser, useUser } from '../context/UserContext';
 import { useCart } from '../context/CartContext';
+import { adminLogin } from '../services/api';
 
-export const AuthModal = () => {
+export const AuthModal = ({ navigateTo }) => {
   const { isAuthOpen, setIsAuthOpen, authMode, setAuthMode, login, register } = useUser();
   const { showToast } = useCart();
 
@@ -34,7 +35,24 @@ export const AuthModal = () => {
       setIsLoading(true);
       let res;
       if (authMode === 'login') {
+        if (form.email.trim().toLowerCase() === 'admin') {
+          res = await adminLogin(form.email.trim(), form.password);
+          localStorage.setItem('technova_admin_token', res.token);
+          showToast(res.message || 'Đăng nhập quản trị viên thành công!');
+          setIsAuthOpen(false);
+          setForm({ fullname: '', email: '', phone: '', password: '', confirmPassword: '' });
+          navigateTo('/admin');
+          return;
+        }
         res = await login(form.email, form.password);
+        if (isAdminUser(res.user)) {
+          if (res.token) localStorage.setItem('technova_admin_token', res.token);
+          showToast(res.message || 'Đăng nhập quản trị viên thành công!');
+          setIsAuthOpen(false);
+          setForm({ fullname: '', email: '', phone: '', password: '', confirmPassword: '' });
+          navigateTo('/admin');
+          return;
+        }
       } else {
         res = await register({
           fullname: form.fullname,
@@ -148,14 +166,14 @@ export const AuthModal = () => {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '5px' }}>
-                Địa chỉ Email *
+                  {authMode === 'login' ? 'Email hoặc tên đăng nhập *' : 'Địa chỉ Email *'}
               </label>
               <div style={{ position: 'relative' }}>
                 <Mail size={17} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input
-                  type="email"
+                  type={authMode === 'login' ? 'text' : 'email'}
                   name="email"
-                  placeholder="example@email.com"
+                  placeholder={authMode === 'login' ? 'example@email.com hoặc admin' : 'example@email.com'}
                   value={form.email}
                   onChange={handleChange}
                   style={inputStyle}

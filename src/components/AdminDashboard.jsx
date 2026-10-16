@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { DollarSign, Package, ShoppingBag, AlertTriangle, Plus, Trash2, RefreshCw, Mail, Lock, User, LogOut, ShieldCheck, KeyRound } from 'lucide-react';
 import { fetchAdminStats, fetchOrders, updateOrderStatus, createProduct, deleteProduct, fetchProducts, fetchContactMessages, adminLogin } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { isAdminUser, useUser } from '../context/UserContext';
 
 export const AdminDashboard = () => {
+  const { currentUser, logout } = useUser();
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return Boolean(localStorage.getItem('technova_admin_token'));
+    return Boolean(localStorage.getItem('technova_admin_token')) || isAdminUser(currentUser);
   });
   const [loginUser, setLoginUser] = useState('');
   const [loginPass, setLoginPass] = useState('');
@@ -84,6 +86,7 @@ export const AdminDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('technova_admin_token');
+    if (isAdminUser(currentUser)) logout();
     setIsAuthenticated(false);
     showToast('Đã đăng xuất khỏi tài khoản Quản trị!');
   };

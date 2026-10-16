@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, CreditCard, Truck, Wallet, ShieldCheck, Printer } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
 import { createOrder } from '../services/api';
 
 export const CheckoutModal = ({ isOpen, onClose }) => {
   const { cartItems, finalTotal, clearCart, showToast } = useCart();
+  const { currentUser, openAuth } = useUser();
 
   const [formData, setFormData] = useState({
     customer_name: '',
@@ -25,6 +27,13 @@ export const CheckoutModal = ({ isOpen, onClose }) => {
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
+    if (!currentUser) {
+      onClose();
+      openAuth('login');
+      showToast('Vui lòng đăng nhập trước khi đặt hàng!');
+      return;
+    }
+
     if (!formData.customer_name || !formData.email || !formData.phone || !formData.address) {
       showToast('Vui lòng điền đầy đủ thông tin giao hàng!');
       return;
